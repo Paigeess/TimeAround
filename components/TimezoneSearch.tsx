@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { filterTimezones } from '@/lib/timezone-data';
+import { filterTimezones, getSearchLocation } from '@/lib/timezone-data';
 import { formatDisplayTime } from '@/lib/timezone';
 import type { TimezoneOption } from '@/types/timezone';
 
@@ -80,6 +80,7 @@ export default function TimezoneSearch({
           ) : (
             options.map((option: TimezoneOption) => {
               const isSelected = selectedIds.includes(option.id);
+              const location = getSearchLocation(option, query);
               return (
                 <button
                   key={option.id}
@@ -102,7 +103,7 @@ export default function TimezoneSearch({
                     <span className="text-2xl">{option.flag ?? '🕒'}</span>
                     <div>
                       <div className="text-sm font-medium text-slate-900 dark:text-slate-50">
-                        {option.city}, {option.country}
+                        {location.city}, {location.country}
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">{option.id}</div>
                     </div>
