@@ -1,11 +1,14 @@
-export type TimeFormat = "12h" | "24h";
-export type ThemeMode = "light" | "dark" | "system";
+export type TimeFormat = '12h' | '24h';
+export type ThemeMode = 'light' | 'dark' | 'system';
 
 export interface TimezoneOption {
   id: string;
   city: string;
   country: string;
   countryCode: string;
+  countries?: string[];
+  citiesByCountry?: Record<string, string>;
+  searchTerms?: string[];
   flag?: string;
 }
 
