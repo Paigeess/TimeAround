@@ -72,7 +72,7 @@ export default function TimezoneSearch({
           />
         </label>
 
-        <div className="max-h-[22rem] space-y-2 overflow-y-auto pr-1">
+        <div className="max-h-88 space-y-2 overflow-y-auto pr-1">
           {options.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
               No matching timezones found.
