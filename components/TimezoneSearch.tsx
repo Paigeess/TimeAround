@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { filterTimezones } from "@/lib/timezone-data";
-import type { TimezoneOption } from "@/types/timezone";
+import { useEffect, useMemo, useState } from 'react';
+import { filterTimezones } from '@/lib/timezone-data';
+import { formatDisplayTime } from '@/lib/timezone';
+import type { TimezoneOption } from '@/types/timezone';
 
 interface TimezoneSearchProps {
   isOpen: boolean;
@@ -17,11 +18,21 @@ export default function TimezoneSearch({
   value,
   onClose,
   onSelect,
-  selectedIds = []
+  selectedIds = [],
 }: TimezoneSearchProps) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
+  const [now, setNow] = useState(() => new Date());
 
   const options = useMemo(() => filterTimezones(query), [query]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const tick = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(tick);
+  }, [isOpen]);
 
   if (!isOpen) {
     return null;
@@ -35,7 +46,9 @@ export default function TimezoneSearch({
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
               Add timezone
             </p>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Search locations</h3>
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-50">
+              Search locations
+            </h3>
           </div>
           <button
             type="button"
@@ -47,7 +60,9 @@ export default function TimezoneSearch({
         </div>
 
         <label className="mb-4 block">
-          <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">Search by city, country, or timezone</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+            Search by city, country, or timezone
+          </span>
           <input
             autoFocus
             value={query}
@@ -76,23 +91,30 @@ export default function TimezoneSearch({
                     onClose();
                   }}
                   className={[
-                    "flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left transition",
+                    'flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left transition',
                     isSelected
-                      ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500"
-                      : "border-soft bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800"
-                  ].join(" ")}
+                      ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500'
+                      : 'border-soft bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800',
+                  ].join(' ')}
                   disabled={isSelected}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{option.flag ?? "🕒"}</span>
+                    <span className="text-2xl">{option.flag ?? '🕒'}</span>
                     <div>
-                      <div className="text-sm font-medium text-slate-900 dark:text-slate-50">{option.city}, {option.country}</div>
+                      <div className="text-sm font-medium text-slate-900 dark:text-slate-50">
+                        {option.city}, {option.country}
+                      </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">{option.id}</div>
                     </div>
                   </div>
-                  <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                    {isSelected ? "Added" : "Select"}
-                  </span>
+                  <div className="text-right">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      {formatDisplayTime(now, option.id, true)}
+                    </div>
+                    <div className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                      {isSelected ? 'Added' : 'Select'}
+                    </div>
+                  </div>
                 </button>
               );
             })
