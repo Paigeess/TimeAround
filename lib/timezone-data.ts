@@ -4,7 +4,7 @@ import type { TimezoneOption } from '@/types/timezone';
 
 function toFlag(countryCode: string): string {
   if (!/^[A-Z]{2}$/.test(countryCode)) {
-    return 'ðŸ•’';
+    return 'Ã°Å¸â€¢â€™';
   }
 
   return String.fromCodePoint(
@@ -271,7 +271,7 @@ function createTimezoneOptions(): TimezoneOption[] {
     countries: ['Coordinated Universal Time'],
     citiesByCountry: {},
     searchTerms: [],
-    flag: 'ðŸ•’',
+    flag: 'Ã°Å¸â€¢â€™',
   });
 
   return timezoneOptions.sort((a, b) => a.city.localeCompare(b.city));
@@ -312,7 +312,6 @@ export function filterTimezones(query: string): TimezoneOption[] {
   }
 
   const terms = normalized.split(/\s+/).filter(Boolean);
-
   return TIMEZONE_OPTIONS
     .map((zone) => {
       const searchableFields = [
@@ -331,16 +330,16 @@ export function filterTimezones(query: string): TimezoneOption[] {
         return null;
       }
 
+      const exactCity = normalize(zone.city) === normalized;
       const exactMatch = searchableFields.some((field) => field === normalized);
       const startsWithMatch = searchableFields.some((field) => field.startsWith(normalized));
-      const score = (exactMatch ? 100 : 0) + (startsWithMatch ? 50 : 0);
+      const score = (exactCity ? 1000 : 0) + (exactMatch ? 100 : 0) + (startsWithMatch ? 50 : 0);
       return { zone, score };
     })
     .filter((result): result is { zone: TimezoneOption; score: number } => Boolean(result))
     .sort((a, b) => b.score - a.score || a.zone.city.localeCompare(b.zone.city))
     .map(({ zone }) => zone);
 }
-
 export function getSearchCountryLabel(zone: TimezoneOption, query: string): string {
   const normalized = normalize(query.trim());
 
