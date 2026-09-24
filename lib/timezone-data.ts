@@ -3,7 +3,7 @@ import type { TimezoneOption } from '@/types/timezone';
 
 function toFlag(countryCode: string): string {
   if (!/^[A-Z]{2}$/.test(countryCode)) {
-    return '🕒';
+    return 'ðŸ•’';
   }
 
   return String.fromCodePoint(
@@ -189,7 +189,7 @@ function createTimezoneOptions(): TimezoneOption[] {
     countries: ['Coordinated Universal Time'],
     citiesByCountry: {},
     searchTerms: [],
-    flag: '🕒',
+    flag: 'ðŸ•’',
   });
 
   return options.sort((a, b) => a.city.localeCompare(b.city));
@@ -223,7 +223,7 @@ export function filterTimezones(query: string): TimezoneOption[] {
     return TIMEZONE_OPTIONS;
   }
 
-  return TIMEZONE_OPTIONS.filter((zone) => {
+  const matches = TIMEZONE_OPTIONS.filter((zone) => {
     const haystack = [
       zone.city,
       zone.country,
@@ -235,8 +235,10 @@ export function filterTimezones(query: string): TimezoneOption[] {
       .join(' ');
     return haystack.includes(normalized);
   });
-}
 
+  const exactCityMatches = matches.filter((zone) => normalize(zone.city) === normalized);
+  return exactCityMatches.length > 0 ? exactCityMatches : matches;
+}
 export function getSearchCountryLabel(zone: TimezoneOption, query: string): string {
   const normalized = normalize(query.trim());
 

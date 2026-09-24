@@ -100,12 +100,13 @@ export default function TimezoneSearch({
                   disabled={isSelected}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{option.flag ?? '🕒'}</span>
+                    <span className="text-2xl">{option.flag ?? 'ðŸ•’'}</span>
                     <div>
                       <div className="text-sm font-medium text-slate-900 dark:text-slate-50">
                         {location.city}, {location.country}
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">{option.id}</div>
+
+
                     </div>
                   </div>
                   <div className="text-right">
