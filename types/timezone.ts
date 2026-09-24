@@ -9,6 +9,8 @@ export interface TimezoneOption {
   countries?: string[];
   citiesByCountry?: Record<string, string>;
   searchTerms?: string[];
+  province?: string;
+  locationKey?: string;
   flag?: string;
 }
 

@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import SourceTimeSelector from '@/components/SourceTimeSelector';
 import TimezoneSearch from '@/components/TimezoneSearch';
 import TimezoneTable from '@/components/TimezoneTable';
-import { DEFAULT_TIMEZONES, getTimezoneById } from '@/lib/timezone-data';
+import { DEFAULT_TIMEZONES, getTimezoneById, getTimezoneIdBySelection } from '@/lib/timezone-data';
 import { readStorage, writeStorage } from '@/lib/storage';
 import {
   formatDateKeyInTimeZone,
@@ -140,13 +140,14 @@ export default function TimezoneConverter() {
 
   const timezoneRows = useMemo(
     () =>
-      selectedTimezones.map((zoneId) => {
+      selectedTimezones.map((selection) => {
+        const zoneId = getTimezoneIdBySelection(selection);
         const localDate = formatDisplayDate(sourceInstant, zoneId);
         const localTime = formatDisplayTime(sourceInstant, zoneId, timeFormat === '12h');
         const relativeLabel = getRelativeDayLabel(sourceTimezone, zoneId, sourceInstant);
 
         return {
-          id: zoneId,
+          id: selection,
           localDate,
           localTime,
           abbreviation: getTimeZoneAbbreviation(sourceInstant, zoneId),

@@ -61,13 +61,13 @@ export default function TimezoneSearch({
 
         <label className="mb-4 block">
           <span className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
-            Search by city, country, or timezone
+            Search by city, state, country, or timezone
           </span>
           <input
             autoFocus
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Try Tokyo, Japan, or Africa"
+            placeholder="Try Chicago, Illinois, Japan, or America/New_York"
             className="w-full rounded-2xl border border-soft bg-slate-50 px-3 py-2.5 text-sm text-slate-900 outline-none ring-0 transition focus:border-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </label>
@@ -83,11 +83,11 @@ export default function TimezoneSearch({
               const location = getSearchLocation(option, query);
               return (
                 <button
-                  key={option.id}
+                  key={option.locationKey ?? option.id}
                   type="button"
                   onClick={() => {
                     if (!isSelected) {
-                      onSelect(option.id);
+                      onSelect(option.locationKey ?? option.id);
                     }
                     onClose();
                   }}
@@ -100,7 +100,7 @@ export default function TimezoneSearch({
                   disabled={isSelected}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{option.flag ?? '🕒'}</span>
+                    <span className="text-2xl">{option.flag ?? 'ðŸ•’'}</span>
                     <div>
                       <div className="text-sm font-medium text-slate-900 dark:text-slate-50">
                         {location.city}, {location.country}
